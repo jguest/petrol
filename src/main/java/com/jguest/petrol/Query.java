@@ -4,7 +4,6 @@ import com.jguest.petrol.clause.*;
 import com.jguest.petrol.predicate.*;
 import com.jguest.petrol.struct.Statement;
 
-import javax.persistence.EntityManager;
 import java.util.function.Function;
 
 /**
@@ -13,7 +12,6 @@ import java.util.function.Function;
 public class Query implements Stringable {
 
    private Statement statement;
-   private EntityManager em;
 
    public Query() {
       this.statement = new Statement();
