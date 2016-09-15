@@ -1,8 +1,12 @@
 ## Petrol
 
-because maintaining strings of sql leads to :shit:
+Because maintaining strings of SQL leads to :shit:
 
-### use it
+### Install
+
+**Maven instructions incoming.**
+
+### Use it
 
 ```java
 Petrol.select("*").from("table").toPlainString();
