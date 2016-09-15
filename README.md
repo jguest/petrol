@@ -1,4 +1,4 @@
-## petrol
+## Petrol
 
 because maintaining strings of sql leads to :shit:
 
@@ -8,7 +8,7 @@ because maintaining strings of sql leads to :shit:
 Petrol.select("*").from("table").toPlainString();
 ```
 
-will prodoce:
+will produce:
 
 ```sql
 SELECT * FROM table;
@@ -32,12 +32,12 @@ Here's the same query with petrol:
 
 ```Java
 Petrol.select("m*")
-    .from("flarbs f", joins
-        -> joins.inner("scrabs s").on("f.id = s.flarbs.id")
-            .outer("medals m").on("s.medals_id = m.id")
-    .where(conditions
-        -> conditions.apply("f.teacher_id = :teacher_id")
-            .and("s.teacher_type_id = 42");
+    .from("flarbs f", joins -> joins
+        .inner("scrabs s").on("f.id = s.flarbs.id")
+        .outer("medals m").on("s.medals_id = m.id")
+    .where(conditions -> conditions
+        .apply("f.teacher_id = :teacher_id")
+        .and("s.teacher_type_id = 42");
 ```
 
 Incoming features
