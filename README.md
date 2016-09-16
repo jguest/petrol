@@ -10,8 +10,6 @@ Because maintaining strings of SQL leads to :shit:
 
 ### As a query builder
 
-This:
-
 ```java
 new QueryBuilder().select("*").from("table");
 ```
@@ -53,13 +51,26 @@ String sql = new QueryBuilder()
 
 *"That's nice, but why not use an ORM?"* I like ORMs for writes but prefer plain ol' SQL for reads.
 
-### As a database interface
+### As a JPA interface
 
-**Coming soon.**
+Instantiate a new `Petrol`, bringing your own `javax.persistence.EntityManager`. Petrol exposes two methods, `#query`, for building the statement and `#stream` for executing it. Use built in Java 8 methods to act on the result. Here's a complete example:
+
+```Java
+// instatiate petrol
+Petrol db = new Petrol(myEntityManager);
+
+// build the query and execute it
+db.query(Sloth.class, query ->
+   query.select("*")
+      .from("sloths s")
+      .where("name = 'Kristen Bell'")
+   )
+.stream()
+.findFirst() // Optional<Sloth>
+```
 
 ## Incoming Features
 
-* JPA integration
 * better support for sub-queries
 * group by
 * count
