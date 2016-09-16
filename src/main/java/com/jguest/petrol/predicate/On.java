@@ -1,7 +1,6 @@
 package com.jguest.petrol.predicate;
 
 import com.jguest.petrol.Stringable;
-import com.jguest.petrol.predicate.Criteria;
 
 /**
  * @author jguest
