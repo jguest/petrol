@@ -1,12 +1,12 @@
-## Petrol
+## petrol
 
-Because maintaining strings of SQL leads to :shit:
+because maintaining strings of SQL leads to :shit:
 
-### Install
+### install
 
 **Maven instructions incoming.**
 
-### Use it
+### use it as a query builder
 
 ```java
 Petrol.select("*").from("table").toPlainString();
@@ -24,10 +24,10 @@ Because
 
 ```java
 String sql = "select m.* " +
-    "from flarbs f " +
-    "inner join scrabs s on f.id = s.flarbs_id " +
-    "outer join medals m on s.medals_id = m.id " +
-    "where f.teacher_id = :teacher_id and s.teacher_type_id = 42";
+   "from flarbs f " +
+   "inner join scrabs s on f.id = s.flarbs_id " + // <-- accidentally miss a space and you die
+   "outer join medals m on s.medals_id = m.id " +
+   "where f.teacher_id = :teacher_id and s.teacher_type_id = 42";
 ```
 
 :flushed: :gun:
@@ -35,17 +35,19 @@ String sql = "select m.* " +
 Here's the same query with petrol:
 
 ```Java
-Petrol.select("m*")
-    .from("flarbs f", joins -> joins
-        .inner("scrabs s").on("f.id = s.flarbs.id")
-        .outer("medals m").on("s.medals_id = m.id")
-    .where(conditions -> conditions
-        .apply("f.teacher_id = :teacher_id")
-        .and("s.teacher_type_id = 42");
+String sql = select("m*")
+   .from("flarbs f", joins -> joins
+      .inner("scrabs s").on("f.id = s.flarbs.id")
+      .outer("medals m").on("s.medals_id = m.id")
+   .where(conditions -> conditions
+      .apply("f.teacher_id = :teacher_id")
+      .and("s.teacher_type_id = 42")
+   .toPlainString();
 ```
 
 Incoming features
 
+* JPA integration
 * better support for sub-queries
 * group by
 * count
