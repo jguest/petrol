@@ -1,7 +1,7 @@
 package com.jguest.petrol.clause;
 
 import com.jguest.petrol.Stringable;
-import com.jguest.petrol.predicate.Joins;
+import com.jguest.petrol.predicate.Table;
 
 import static java.lang.String.format;
 import static java.lang.String.join;
@@ -12,25 +12,25 @@ import static java.lang.String.join;
 public class From implements Stringable {
 
    private String[] tables;
-   private Joins joins;
+   private Table table;
 
    public From(String[] tables) {
       this.tables = tables;
    }
 
-   public void joins(Joins joins) {
-      this.joins = joins;
+   public void joins(Table table) {
+      this.table = table;
    }
 
    @Override
    public String toPlainString() {
 
-      String sql =  format("FROM %s", join(", ", (CharSequence[]) tables));
+      String sql = format("FROM %s", join(", ", (CharSequence[]) tables));
 
-      if (joins != null) {
+      if (table != null) {
          sql = sql
             .concat(" ")
-            .concat(joins.toPlainString());
+            .concat(table.toPlainString());
       }
 
       return sql;

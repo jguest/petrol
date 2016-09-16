@@ -13,7 +13,7 @@ Because maintaining strings of SQL leads to :shit:
 This:
 
 ```java
-Petrol.select("*").from("table").toPlainString();
+new QueryBuilder().select("*").from("table");
 ```
 
 will produce the following query:
@@ -27,10 +27,10 @@ SELECT * FROM table
 Oh, because:
 
 ```java
-String sql = "select m.* " +
+String sql = "select m.* " + // <-- eww multiline concatenation
    "from flarbs f " +
    "inner join scrabs s on f.id = s.flarbs_id " + // <-- accidentally miss a space and you die
-   "outer join medals m on s.medals_id = m.id " +
+   "left outer join medals m on s.medals_id = m.id " +
    "where f.teacher_id = :teacher_id and s.teacher_type_id = 42";
 ```
 
@@ -42,9 +42,9 @@ Here's the same query built with petrol:
 
 ```Java
 String sql = select("m*")
-   .from("flarbs f", joins -> joins
-      .inner("scrabs s").on("f.id = s.flarbs.id")
-      .outer("medals m").on("s.medals_id = m.id"))
+   .from("flarbs f", table -> table
+      .innerJoin("scrabs s").on("f.id = s.flarbs.id")
+      .leftOuterJoin("medals m").on("s.medals_id = m.id"))
    .where(conditions -> conditions
       .apply("f.teacher_id = :teacher_id")
       .and("s.teacher_type_id = 42"))
