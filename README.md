@@ -8,19 +8,21 @@ Because maintaining strings of SQL leads to :shit:
 
 ### Use It
 
-#### as a query builder
+#### As a query builder
+
+This:
 
 ```java
 Petrol.select("*").from("table").toPlainString();
 ```
 
-will produce:
+will produce the following SQL:
 
 ```sql
 SELECT * FROM table
 ```
 
-"Oh, that's even longer than writing the SQL! Why would you want that?"
+*"Oh, that's even longer than writing the SQL! Why would you want that?"*
 
 Oh, because:
 
@@ -34,7 +36,9 @@ String sql = "select m.* " +
 
 :flushed: :gun:
 
-Here's the same query with petrol:
+And that was the neatest string of SQL I could find.
+
+Here's the same string built with petrol:
 
 ```Java
 String sql = select("m*")
@@ -47,7 +51,9 @@ String sql = select("m*")
    .toPlainString();
 ```
 
-#### as a database interface
+*"That's nice, but why not use an ORM?"* I like ORMs for writes but prefer plain ol' SQL for reads.
+
+#### As a database interface
 
 **Coming soon.**
 
