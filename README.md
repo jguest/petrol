@@ -2,6 +2,8 @@
 
 Because maintaining strings of SQL leads to :shit:
 
+[![](https://jitpack.io/v/jguest/petrol.svg)](https://jitpack.io/#jguest/petrol)
+
 ## Install
 
 *Maven instructions incoming.*
