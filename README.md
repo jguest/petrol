@@ -1,12 +1,14 @@
-## petrol
+## Petrol
 
-because maintaining strings of SQL leads to :shit:
+Because maintaining strings of SQL leads to :shit:
 
-### install
+### Install
 
 **Maven instructions incoming.**
 
-### use it as a query builder
+### Use It
+
+#### as a query builder
 
 ```java
 Petrol.select("*").from("table").toPlainString();
@@ -15,12 +17,12 @@ Petrol.select("*").from("table").toPlainString();
 will produce:
 
 ```sql
-SELECT * FROM table;
+SELECT * FROM table
 ```
 
 "Oh, that's even longer than writing the SQL! Why would you want that?"
 
-Because
+Oh, because:
 
 ```java
 String sql = "select m.* " +
@@ -45,7 +47,11 @@ String sql = select("m*")
    .toPlainString();
 ```
 
-Incoming features
+#### as a database interface
+
+**Coming soon.**
+
+### Incoming Features
 
 * JPA integration
 * better support for sub-queries
