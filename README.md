@@ -44,10 +44,10 @@ Here's the same query built with petrol:
 String sql = select("m*")
    .from("flarbs f", joins -> joins
       .inner("scrabs s").on("f.id = s.flarbs.id")
-      .outer("medals m").on("s.medals_id = m.id")
+      .outer("medals m").on("s.medals_id = m.id"))
    .where(conditions -> conditions
       .apply("f.teacher_id = :teacher_id")
-      .and("s.teacher_type_id = 42")
+      .and("s.teacher_type_id = 42"))
    .toPlainString();
 ```
 
