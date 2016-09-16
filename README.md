@@ -1,14 +1,14 @@
-## Petrol
+# Petrol
 
 Because maintaining strings of SQL leads to :shit:
 
-### Install
+## Install
 
-**Maven instructions incoming.**
+*Maven instructions incoming.*
 
-### Use It
+## Use It
 
-#### As a query builder
+### As a query builder
 
 This:
 
@@ -16,13 +16,13 @@ This:
 Petrol.select("*").from("table").toPlainString();
 ```
 
-will produce the following SQL:
+will produce the following query:
 
 ```sql
 SELECT * FROM table
 ```
 
-*"Oh, that's even longer than writing the SQL! Why would you want that?"*
+*"Oh, that's even longer than writing the SQL! Why would you want that?"* 
 
 Oh, because:
 
@@ -38,7 +38,7 @@ String sql = "select m.* " +
 
 And that was the neatest string of SQL I could find.
 
-Here's the same string built with petrol:
+Here's the same query built with petrol:
 
 ```Java
 String sql = select("m*")
@@ -53,11 +53,11 @@ String sql = select("m*")
 
 *"That's nice, but why not use an ORM?"* I like ORMs for writes but prefer plain ol' SQL for reads.
 
-#### As a database interface
+### As a database interface
 
 **Coming soon.**
 
-### Incoming Features
+## Incoming Features
 
 * JPA integration
 * better support for sub-queries
