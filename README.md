@@ -25,11 +25,10 @@ SELECT * FROM table
 Oh, because:
 
 ```java
-String sql = "select m.* " + // <-- eww multiline concatenation
-   "from flarbs f " +
+String sql = "select m.* " +
+   "from flarbs f " + // <-- eww multiline concatenation
    "inner join scrabs s on f.id = s.flarbs_id " + // <-- accidentally miss a space and you die
-   "left outer join medals m on s.medals_id = m.id " +
-   "where f.teacher_id = :teacher_id and s.teacher_type_id = 42";
+   "where f.teacher_type_id = 42";
 ```
 
 :flushed: :gun:
@@ -40,13 +39,11 @@ Here's the same query built with petrol:
 
 ```Java
 String sql = new QueryBuilder()
-   .select("m*")
+   .select("s.*")
    .from("flarbs f", table ->
-      table.innerJoin("scrabs s").on("f.id = s.flarbs.id")
-         .leftOuterJoin("medals m").on("s.medals_id = m.id"))
+      table.innerJoin("scrabs s").on("f.id = s.flarbs.id"))
    .where(conditions ->
-      conditions.apply("f.teacher_id = :teacher_id")
-         .and("s.teacher_type_id = 42"))
+      conditions.apply("f.teacher_type_id = 42"))
    .toPlainString();
 ```
 
