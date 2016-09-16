@@ -41,13 +41,13 @@ And that was the neatest string of SQL I could find.
 Here's the same query built with petrol:
 
 ```Java
-String sql = select("m*")
-   .from("flarbs f", table -> table
-      .innerJoin("scrabs s").on("f.id = s.flarbs.id")
-      .leftOuterJoin("medals m").on("s.medals_id = m.id"))
-   .where(conditions -> conditions
-      .apply("f.teacher_id = :teacher_id")
-      .and("s.teacher_type_id = 42"))
+String sql = new QueryBuilder()
+   .select("m*")
+   .from("flarbs f", (table) -> {
+      table.innerJoin("scrabs s").on("f.id = s.flarbs.id");
+      table.leftOuterJoin("medals m").on("s.medals_id = m.id")); })
+   .where("f.teacher_id = :teacher_id", condition ->
+      condition.and("s.teacher_type_id = 42"))
    .toPlainString();
 ```
 
