@@ -41,11 +41,12 @@ Here's the same query built with petrol:
 ```Java
 String sql = new QueryBuilder()
    .select("m*")
-   .from("flarbs f", (table) -> {
-      table.innerJoin("scrabs s").on("f.id = s.flarbs.id");
-      table.leftOuterJoin("medals m").on("s.medals_id = m.id")); })
-   .where("f.teacher_id = :teacher_id", condition ->
-      condition.and("s.teacher_type_id = 42"))
+   .from("flarbs f", table ->
+      table.innerJoin("scrabs s").on("f.id = s.flarbs.id")
+         .leftOuterJoin("medals m").on("s.medals_id = m.id"))
+   .where(conditions ->
+      conditions.apply("f.teacher_id = :teacher_id")
+         .and("s.teacher_type_id = 42"))
    .toPlainString();
 ```
 
@@ -56,14 +57,14 @@ String sql = new QueryBuilder()
 Instantiate a new `Petrol`, bringing your own `javax.persistence.EntityManager`. Petrol exposes two methods, `#query`, for building the statement and `#stream` for executing it. Use built in Java 8 methods to act on the result. Here's a complete example:
 
 ```Java
-// instatiate petrol
+// instantiate petrol
 Petrol db = new Petrol(myEntityManager);
 
 // build the query and execute it
 db.query(Sloth.class, query ->
-   query.select("*")
+   query.select("s.*")
       .from("sloths s")
-      .where("name = 'Kristen Bell'")
+      .where("s.name = 'Kristen Bell'")
    )
 .stream()
 .findFirst() // Optional<Sloth>
@@ -71,6 +72,7 @@ db.query(Sloth.class, query ->
 
 ## Incoming Features
 
+* parameter substitution
 * better support for sub-queries
 * group by
 * count
