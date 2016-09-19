@@ -1,5 +1,6 @@
 package com.jguest.petrol.predicate;
 
+import com.jguest.petrol.Keywords;
 import com.jguest.petrol.Stringable;
 
 import java.util.ArrayList;
@@ -29,16 +30,24 @@ public class Condition implements Stringable {
    }
 
    public Condition and(Function<Condition, Condition> condition) {
-      expression.add(AND);
-      expression.add(() -> "(");
-      expression.add(condition.apply(new Condition()));
-      expression.add(() -> ")");
-      return this;
+      return addNestedCondition(condition, AND);
    }
 
    public Condition or(String condition) {
       expression.add(OR);
       expression.add(() -> condition);
+      return this;
+   }
+
+   public Condition or(Function<Condition, Condition> condition) {
+      return addNestedCondition(condition, OR);
+   }
+
+   private Condition addNestedCondition(Function<Condition, Condition> condition, Keywords keyword) {
+      expression.add(keyword);
+      expression.add(() -> "(");
+      expression.add(condition.apply(new Condition()));
+      expression.add(() -> ")");
       return this;
    }
 
