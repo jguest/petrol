@@ -2,6 +2,7 @@ package com.jguest.petrol;
 
 import javax.persistence.EntityManager;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author jguest
@@ -23,9 +24,9 @@ public class Petrol {
     *
     * @return runnable query
     */
-   public <T> Results<T> query(Class<T> target, Function<QueryBuilder, QueryBuilder> query) {
+   public <T> Stream<T> stream(Class<T> target, Function<Query, Query> query) {
       Results<T> rq = new Results<>(target, entityManager);
-      query.apply(rq.queryBuilder);
-      return rq;
+      query.apply(rq.query);
+      return rq.stream();
    }
 }

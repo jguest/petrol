@@ -1,9 +1,8 @@
 import com.jguest.petrol.Petrol;
-import com.jguest.petrol.QueryBuilder;
+import com.jguest.petrol.Query;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import java.util.Arrays;
 
@@ -25,7 +24,7 @@ public class PetrolTest {
    @Test
    public void testBunnies() {
 
-      String sql = new QueryBuilder()
+      String sql = new Query()
          .select("*")
          .from("bunnies")
          .toPlainString();
@@ -37,11 +36,11 @@ public class PetrolTest {
    @Test
    public void testCrazyManlyBunnies() {
 
-      String sql = new QueryBuilder()
+      String sql = new Query()
          .select("b.*")
          .from("bunnies b")
-         .where(conditions ->
-            conditions.apply("b.age > 18").and("b.type = 'rabid'"))
+         .where("b.age > 18", condition ->
+            condition.and("b.type = 'rabid'"))
          .toPlainString();
 
       log(sql);
@@ -51,7 +50,7 @@ public class PetrolTest {
    @Test
    public void testLigers() {
 
-      String sql = new QueryBuilder()
+      String sql = new Query()
          .select("t.id", "l.id")
          .from("tigers t", table ->
             table.innerJoin("lions l").on("t.lion_id = l.id"))
@@ -61,32 +60,31 @@ public class PetrolTest {
       assertEquals("SELECT t.id, l.id FROM tigers t INNER JOIN lions l ON t.lion_id = l.id", sql);
    }
 
+   class Sloth {
+
+      private Integer slownessLevel;
+
+      public Sloth(Integer slownessLevel) {
+         this.slownessLevel = slownessLevel;
+      }
+
+      public String repeat(String message) {
+
+         StringBuilder toRepeat = new StringBuilder();
+         char[] chars = message.toCharArray();
+
+         for (char aChar : chars)
+            if (aChar == ' ') toRepeat.append(aChar);
+            else for (int j = 0; j < slownessLevel; j++)
+               toRepeat.append(aChar);
+
+         return toRepeat.toString();
+      }
+   }
    @Test
    public void testSlothQuery() {
 
-      class Sloth {
-
-         private Integer slownessLevel;
-
-         public Sloth(Integer slownessLevel) {
-            this.slownessLevel = slownessLevel;
-         }
-
-         public String repeat(String message) {
-
-            StringBuilder toRepeat = new StringBuilder();
-            char[] chars = message.toCharArray();
-
-            for (char aChar : chars)
-               if (aChar == ' ') toRepeat.append(aChar);
-               else for (int j = 0; j < slownessLevel; j++)
-                  toRepeat.append(aChar);
-
-            return toRepeat.toString();
-         }
-      }
-
-      Query mockedQuery = mock(Query.class);
+      javax.persistence.Query mockedQuery = mock(javax.persistence.Query.class);
       when(mockedQuery.getResultList()).thenReturn(Arrays.asList(new Sloth(3)));
 
       EntityManager entityManager = mock(EntityManager.class);
@@ -94,18 +92,31 @@ public class PetrolTest {
 
       Petrol petrol = new Petrol(entityManager);
 
-      petrol.query(Sloth.class, query ->
-         query.select("*")
+      petrol.stream(Sloth.class, query ->
+         query.select("s.*")
             .from("sloths s")
-            .where(conditions ->
-               conditions.apply("name = 'Kristen Bell'")
-            )
+            .where("name = 'Kristen Bell'")
          )
-         .stream()
          .findFirst()
          .ifPresent(sloth ->
             assertEquals("hhheeellllllooo wwwooorrrlllddd", sloth.repeat("hello world"))
          );
 
    }
+
+   @Test
+   public void testSpecificSloth() {
+
+      String sql = new Query()
+         .select("s.*")
+         .from("sloths s", "slowness n")
+         .where("s.slowness_id = n.id", condition ->
+            condition.and(nested ->
+               nested.apply("s.name = 'Kristen Bell'").or("n.level = 1.5")))
+         .toPlainString();
+
+      log(sql);
+      assertEquals("SELECT s.* FROM sloths s, slowness n WHERE s.slowness_id = n.id AND ( s.name = 'Kristen Bell' OR n.level = 1.5 )", sql);
+   }
+
 }

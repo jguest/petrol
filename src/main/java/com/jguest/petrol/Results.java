@@ -12,12 +12,12 @@ public class Results<T> {
    private final Class<T> target;
    private final EntityManager entityManager;
 
-   final QueryBuilder queryBuilder;
+   final Query query;
 
    Results(Class<T> target, EntityManager entityManager) {
       this.target = target;
       this.entityManager = entityManager;
-      this.queryBuilder = new QueryBuilder();
+      this.query = new Query();
    }
 
    /**
@@ -28,7 +28,7 @@ public class Results<T> {
    public Stream<T> stream() {
 
       List<T> results = entityManager
-         .createNativeQuery(queryBuilder.toPlainString(), target)
+         .createNativeQuery(query.toPlainString(), target)
          .getResultList();
 
       return results == null ? Stream.empty() : results.stream();

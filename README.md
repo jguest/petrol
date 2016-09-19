@@ -4,16 +4,40 @@ Because maintaining strings of SQL leads to :shit:
 
 [![](https://jitpack.io/v/jguest/petrol.svg)](https://jitpack.io/#jguest/petrol)
 
+**Warning**: this library is under active development and is not ready for production use.
+
 ## Install
 
-*Maven instructions incoming.*
+Maven + Jitpack:
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+<dependencies>
+    <dependency>
+        <groupId>com.github.jguest</groupId>
+        <artifactId>petrol</artifactId>
+        <version>v0.1.0</version>
+        <exclusions>
+            <exclusion>
+                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                <groupId>org.hibernate.javax.persistence</groupId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+</dependencies>
+```
 
 ## Use It
 
 ### As a query builder
 
 ```java
-new QueryBuilder().select("*").from("table");
+new Query().select("*").from("table").toPlainString();
 ```
 
 will produce the following query:
@@ -40,12 +64,11 @@ And that was the neatest string of SQL I could find.
 Here's the same query built with petrol:
 
 ```Java
-String sql = new QueryBuilder()
+String sql = new Query()
    .select("s.*")
    .from("flarbs f", table ->
       table.innerJoin("scrabs s").on("f.id = s.flarbs_id"))
-   .where(conditions ->
-      conditions.apply("f.teacher_type_id = 42"))
+   .where("f.teacher_type_id = 42")
    .toPlainString();
 ```
 
@@ -53,20 +76,19 @@ String sql = new QueryBuilder()
 
 ### As a JPA interface
 
-Instantiate a new `Petrol`, bringing your own `javax.persistence.EntityManager`. Petrol exposes two methods, `#query`, for building the statement and `#stream` for executing it. Use built in Java 8 methods to act on the result. Here's a complete example:
+Instantiate `Petrol`, bringing your own `javax.persistence.EntityManager`. Petrol's `#stream` method accepts a class (entity) and query function and will return a `java.util.stream.Stream`. Use built in Java 8 methods to act on the result. Here's a complete example:
 
 ```Java
 // instantiate petrol
 Petrol db = new Petrol(myEntityManager);
 
 // build the query and execute it
-db.query(Sloth.class, query ->
-   query.select("s.*")
-      .from("sloths s")
+db.stream(Sloth.class, query ->
+   query.select("*")
+      .from("sloths")
       .where("s.name = 'Kristen Bell'")
    )
-.stream()
-.findFirst() // Optional<Sloth>
+   .findFirst() // Optional<Sloth>
 ```
 
 ## Incoming Features

@@ -1,21 +1,21 @@
 package com.jguest.petrol.clause;
 
 import com.jguest.petrol.Stringable;
-import com.jguest.petrol.predicate.Conditions;
+import com.jguest.petrol.predicate.Condition;
 
 /**
  * @author jguest
  */
 public class Where implements Stringable {
 
-   private Conditions conditions;
+   private Condition condition;
 
-   public Where(Conditions conditions) {
-      this.conditions = conditions;
+   public Where(Condition condition) {
+      this.condition = condition;
    }
 
    @Override
    public String toPlainString() {
-      return String.format("WHERE %s", conditions.toPlainString());
+      return String.format("WHERE %s", condition.toPlainString());
    }
 }
