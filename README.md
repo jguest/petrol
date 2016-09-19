@@ -27,7 +27,7 @@ SELECT * FROM table
 Oh, because:
 
 ```java
-String sql = "select m.* " +
+String sql = "select s.* " +
    "from flarbs f " + // <-- eww multiline concatenation
    "inner join scrabs s on f.id = s.flarbs_id " + // <-- accidentally miss a space and you die
    "where f.teacher_type_id = 42";
@@ -43,7 +43,7 @@ Here's the same query built with petrol:
 String sql = new QueryBuilder()
    .select("s.*")
    .from("flarbs f", table ->
-      table.innerJoin("scrabs s").on("f.id = s.flarbs.id"))
+      table.innerJoin("scrabs s").on("f.id = s.flarbs_id"))
    .where(conditions ->
       conditions.apply("f.teacher_type_id = 42"))
    .toPlainString();
